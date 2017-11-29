@@ -1,0 +1,218 @@
+<div class="aw-container-wrap"  ng-controller="messageController">
+    <div class="container">
+        <div class="row">
+            <div class="aw-content-wrap clearfix">
+                <!--侧边栏-->
+                <div class="col-sm-12 col-md-9 aw-main-content">
+                    <!--tab切换-->
+                    <ul class="nav nav-tabs aw-nav-tabs active hidden-xs">
+                        <li class>
+                            <a href="#read" id="page_read" data-toggle="tab">已读消息</a>
+                        </li>
+                        <li class="active">
+                            <a href="#noread" id="page_noread" data-toggle="tab">未读消息</a>
+                        </li>
+                        <h2 class="pull-right">
+                            <i class="fa fa-bell-o"></i>
+                            消息
+                        </h2> 
+                    </ul>
+                    <div class="aw-user-center-tab">
+                        <div class="tab-content">
+
+                                <!-- 未读消息部分 --> 
+                            <div class="tab-pane active" id="noread">
+                                <div class="aw-mod">
+                                    <div class="mod-head"> 
+                                        <h3>
+                                            <a ng-click="allRead()" class="btn  btn-success">全部已读</a>
+                                        </h3>
+                                        <h3>未读消息</h3>
+                                    </div>
+                                    <div class="mod-body">
+                                            <%if (noread && noread.length > 0){%>
+                                                <% noread.forEach(function(message,index){%>
+                                                    <%if (message.type == 'reply'){%>
+                                                    <div class="aw-item"   id="<%= index %>" data-message="<%= message._id %>">
+                                                        <p>
+                                                            <span class="pull-right text-color-999">
+                                                                <a ng-click="readed(<%= index %>)" class="btn btn-mini btn-primary">
+                                                                    确认已读
+                                                                </a>
+                                                            </span>
+                                                            <em class="pull-left">
+                                                                <a href="/users/center/<%=message.fromUserId.name%>" class="aw-user-name"><%= message.fromUserId.name %></a>
+                                                                回复了你的问题
+                                                            </em>
+                                                            <a href="/articles/detail/<%=message.articleId._id%>" class="aw-hide-txt">
+                                                                <%= message.articleId.title %>
+                                                            </a>
+                                                        </p>
+                                                    </div>
+                                                    <% }else if(message.type == 'comment'){ %>
+                                                        <div class="aw-item"  id="<%= index %>" data-message="<%= message._id %>">
+                                                            <p>
+                                                                <span class="pull-right text-color-999">
+                                                                    <a ng-click="readed(<%= index %>)" class="btn btn-mini btn-primary">
+                                                                        确认已读
+                                                                    </a>
+                                                                </span>
+                                                                <em class="pull-left">
+                                                                    <a href="/users/center/<%=message.fromUserId.name%>" class="aw-user-name"><%= message.fromUserId.name %>
+                                                                    </a>
+                                                                    评论了你的文章
+                                                                </em>
+                                                                <a href="/articles/detail/<%=message.articleId._id%>" class="aw-hide-txt">
+                                                                    <%= message.articleId.title %>
+                                                                </a>
+                                                            </p>
+                                                        </div>
+                                                        <% }else if(message.type == 'favorite'){ %>
+                                                        <div class="aw-item" id="<%= index %>" data-message="<%= message._id %>">
+                                                            <p>
+                                                                <span class="pull-right text-color-999">
+                                                                    <a ng-click="readed(<%= index %>)" class="btn btn-mini btn-primary btnColor">
+                                                                        确认已读
+                                                                    </a>
+                                                                </span>
+                                                                <em class="pull-left">
+                                                                    <a href="/users/center/<%=message.fromUserId.name%>" class="aw-user-name">
+                                                                        <%= message.fromUserId.name %>
+                                                                    </a>
+                                                                    收藏了你的文章
+                                                                </em>
+                                                                <a href="/articles/detail/<%=message.articleId._id%>" class="aw-hide-txt">
+                                                                    <%= message.articleId.title %>
+                                                                </a>
+                                                            </p>
+                                                        </div>
+                                                        <% }else if(message.type == 'follow'){ %>
+                                                        <div class="aw-item" id="<%= index %>"  data-message="<%= message._id %>">
+                                                            <p>
+                                                                <span class="pull-right text-color-999">
+                                                                    <a ng-click="readed(<%= index %>)" class="btn btn-mini btn-primary">
+                                                                        确认已读
+                                                                    </a>
+                                                                </span>
+                                                                <em class="pull-left">
+                                                                    <a href="/users/center/<%=message.fromUserId.name%>" class="aw-user-name"><%= message.fromUserId.name %>
+                                                                    </a>
+                                                                    关注了你
+                                                                </em>
+                                                                <a  class="aw-hide-txt" >
+                                                                   时间： <%= message.createTimeFormat %>
+                                                                </a>
+                                                            </p>
+                                                        </div>
+                                                        <% } %>
+                                                    
+                                                    <% }) %>
+                                                    <% }else{ %>
+                                            <p align="center">没有未读消息</p>
+                                            <% } %>
+                                        </div>
+                                </div>
+                            </div>
+
+
+                            <!-- 已读消息部分 -->
+
+                            <div class="tab-pane" id="read">
+                                <div class="aw-mod">
+                                    <div class="mod-head">
+                                        <h3>已读消息</h3>
+                                    </div>
+                             <div class="mod-body">
+                                        <%if (read && read.length > 0){%>
+                                        <% read.forEach(function(message,index){%>
+                                            <%if (message.type == 'reply'){%>
+                                                <div class="aw-item" id="<%= index %>"  data-message="<%= message._id %>">
+                                                    <p>
+                                                        <span class="pull-right text-color-999">
+                                                            <a ng-click="readed(<%= index %>)" class="btn btn-mini btn-primary">
+                                                                确认已读
+                                                            </a>
+                                                        </span>
+                                                        <em class="pull-left">
+                                                            <a href="/users/center/<%=message.fromUserId.name%>" class="aw-user-name"><%= message.fromUserId.name %></a>
+                                                            回复了你的问题
+                                                        </em>
+                                                        <a href="/articles/detail/<%=message.articleId._id%>" class="aw-hide-txt">
+                                                            <%= message.articleId.title %>
+                                                        </a>
+                                                    </p>
+                                                </div>
+                                                <% }else if(message.type == 'comment'){ %>
+                                                    <div class="aw-item"   data-message="<%= message._id %>">
+                                                        <p>
+                                                            <span class="pull-right text-color-999">
+                                                                <a ng-click="readed(<%= index %>)" class="btn btn-mini btn-primary">
+                                                                    确认已读
+                                                                </a>
+                                                            </span>
+                                                            <em class="pull-left">
+                                                                <a href="/users/center/<%=message.fromUserId.name%>" class="aw-user-name"><%= message.fromUserId.name %>
+                                                                </a>
+                                                                评论了你的文章
+                                                            </em>
+                                                            <a href="/articles/detail/<%=message.articleId._id%>" class="aw-hide-txt">
+                                                                <%= message.articleId.title %>
+                                                            </a>
+                                                        </p>
+                                                    </div>
+                                                <% }else if(message.type == 'favorite'){ %>
+                                                    <div class="aw-item"  data-message="<%= message._id %>">
+                                                        <p>
+                                                            <span class="pull-right text-color-999">
+                                                                <a ng-click="readed(<%= index %>)" class="btn btn-mini btn-primary btnColor">
+                                                                    确认已读
+                                                                </a>
+                                                            </span>
+                                                            <em class="pull-left">
+                                                                <a href="/users/center/<%=message.fromUserId.name%>" class="aw-user-name"><%= message.fromUserId.name %>
+                                                                  
+                                                                </a>
+                                                                收藏了你的文章
+                                                            </em>
+                                                            <a href="/articles/detail/<%=message.articleId._id%>" class="aw-hide-txt">
+                                                                <%= message.articleId.title %>
+                                                            </a>
+                                                        </p>
+                                                    </div>
+                                                <% }else if(message.type == 'follow'){ %>
+                                                    <div class="aw-item"  data-message="<%= message._id %>">
+                                                        <p>
+                                                            <span class="pull-right text-color-999">
+                                                                <a ng-click="readed(<%= index %>)" class="btn btn-mini btn-primary">
+                                                                    确认已读
+                                                                </a>
+                                                            </span>
+                                                            <em class="pull-left">
+                                                                <a href="/users/center/<%=message.fromUserId.name%>" class="aw-user-name"><%= message.fromUserId.name %>
+                                                                </a>
+                                                                关注了你
+                                                            </em>
+                                                            <a  class="aw-hide-txt" >
+                                                               时间： <%= message.createTimeFormat %>
+                                                            </a>
+                                                        </p>
+                                                    </div>
+                                                 <% } %>
+                                                <% }) %>
+                                                <% }else{ %>
+                                        <p align="center">没有未读消息</p>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--side-bar-->
+                <div class="col-md-3 aw-side-bar hidden-xs hidden-sm">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
